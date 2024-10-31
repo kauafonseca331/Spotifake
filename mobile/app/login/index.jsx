@@ -25,7 +25,7 @@ export default function LoginScreen() {
         alert('Login bem-sucedido');
         navigation.navigate('Home');
       } else if (response.status === 401) {
-        alert('Email ou senha incorretos');
+        alert('Email ou cabeça incorretos');
       } else {
         const errorText = await response.text();
         alert('Erro', errorText);
