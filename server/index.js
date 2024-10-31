@@ -8,7 +8,7 @@ const app = Express()
 app.use(Express.json())
 app.use(cors())
 // app.get('/pegar', function (req, res) {
-//     res.send('enviar esta mensagem')
+//     res.send('enviarqweqweqweqwe mensagem')
 // })
 
 // app.get('/pegar2', function (req, res) {
