@@ -9,6 +9,8 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const navigation = useNavigation();
 
   const handleRegister = async () => {
@@ -34,18 +36,18 @@ export default function RegisterScreen() {
 
       if (response.status === 406) {
         alert('Erro: Todos os campos devem ser preenchidos');
-        return
+        return;
       } else if (response.status === 400) {
         alert('Erro: Usuário já cadastrado');
-        return
+        return;
       } else if (response.status === 201) {
         alert('Sucesso: Usuário registrado com sucesso');
         navigation.navigate('Login');
-        return
+        return;
       } else {
         const errorText = await response.text();
         alert(`Erro: ${errorText}`);
-        return
+        return;
       }
     } catch (error) {
       console.error(error);
@@ -55,13 +57,57 @@ export default function RegisterScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Registrar-se no Spotfake</Text>
-      <TextInput style={styles.input} placeholder="Nome" onChangeText={setNome} />
-      <TextInput style={styles.input} placeholder="Sobrenome" onChangeText={setSobrenome} />
-      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" autoCapitalize="none" onChangeText={setEmail} />
-      <TextInput style={styles.input} placeholder="Data de Nascimento (AAAA-MM-DD)" onChangeText={setDataNascimento} />
-      <TextInput style={styles.input} placeholder="Senha" secureTextEntry onChangeText={setPassword} />
-      <TextInput style={styles.input} placeholder="Confirmar Senha" secureTextEntry onChangeText={setConfirmPassword} />
+      <Text style={styles.title}>Registrar-se no Spotifake</Text>
+      <TextInput style={styles.input} placeholder="Nome" onChangeText={setNome} placeholderTextColor="#B3B3B3" />
+      <TextInput style={styles.input} placeholder="Sobrenome" onChangeText={setSobrenome} placeholderTextColor="#B3B3B3" />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        onChangeText={setEmail}
+        placeholderTextColor="#B3B3B3"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Data de Nascimento (31-12-2000)"
+        onChangeText={setDataNascimento}
+        placeholderTextColor="#B3B3B3"
+      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          secureTextEntry={!isPasswordVisible}
+          onChangeText={setPassword}
+          placeholderTextColor="#B3B3B3"
+        />
+        <TouchableOpacity
+          style={styles.showButton}
+          onPress={() => setPasswordVisible(!isPasswordVisible)}
+        >
+          <Text style={styles.showButtonText}>
+            {isPasswordVisible ? "Ocultar" : "Mostrar"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Confirmar Senha"
+          secureTextEntry={!isConfirmPasswordVisible}
+          onChangeText={setConfirmPassword}
+          placeholderTextColor="#B3B3B3"
+        />
+        <TouchableOpacity
+          style={styles.showButton}
+          onPress={() => setConfirmPasswordVisible(!isConfirmPasswordVisible)}
+        >
+          <Text style={styles.showButtonText}>
+            {isConfirmPasswordVisible ? "Ocultar" : "Mostrar"}
+          </Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Registrar</Text>
       </TouchableOpacity>
@@ -88,25 +134,50 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    paddingHorizontal: 10,
+    backgroundColor: '#282828',
+    borderRadius: 25,
+    paddingHorizontal: 15,
     marginBottom: 15,
+    color: '#fff',
+    fontSize: 16,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  showButton: {
+    position: 'absolute',
+    right: 15,
+    padding: 5,
+  },
+  showButtonText: {
+    color: '#1DB954',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   button: {
     backgroundColor: '#1DB954',
-    borderRadius: 5,
+    borderRadius: 25,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginVertical: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
   linkText: {
-    color: '#1DB954',
+    color: '#B3B3B3',
     textAlign: 'center',
+    fontSize: 14,
+    textDecorationLine: 'underline',
   },
 });
