@@ -1,15 +1,33 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker'
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
 
+  const [image,setImage] = useState("https://via.placeholder.com/150")
+
   const user = {
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    avatar: 'https://via.placeholder.com/150', // URL de imagem do avatar
+    name: 'Kauã',
+    email: 'kaua@gmail.com',
   };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4,3],
+        quality: 1,
+    });
+
+    console.log(result)
+
+    if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
+  
+}
 
   const handleLogout = () => {
     navigation.navigate('Login');
@@ -17,7 +35,8 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: user.avatar }} style={styles.avatar} />
+      <Pressable onPress={pickImage}> 
+        <Image source={image} style={styles.avatar} /></Pressable>
       <Text style={styles.name}>{user.name}</Text>
       <Text style={styles.email}>{user.email}</Text>
 
@@ -30,7 +49,7 @@ export default function ProfileScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={handleLogout}>
-        <Text style={[styles.buttonText, styles.logoutButtonText]}>Logout</Text>
+        <Text style={[styles.buttonText, styles.logoutButtonText]}>Deslogar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -39,38 +58,38 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#191414',
+    backgroundColor: '#191414',  
     alignItems: 'center',
     padding: 20,
   },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginTop: 50,
-    borderWidth: 2,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginTop: 40,
+    borderWidth: 3,
     borderColor: '#1DB954',
   },
   name: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    color: '#fff',
-    marginVertical: 10,
+    color: '#ffffff',
+    marginTop: 20,
   },
   email: {
     fontSize: 16,
     color: '#B3B3B3',
-    marginBottom: 30,
+    marginBottom: 40,
   },
   button: {
-    width: '80%',
-    backgroundColor: '#282828',
-    paddingVertical: 12,
-    borderRadius: 25,
+    width: '85%',
+    backgroundColor: '#282828',  
+    paddingVertical: 14,
+    borderRadius: 30,
     alignItems: 'center',
-    marginVertical: 8,
+    marginVertical: 10,
     borderWidth: 1,
-    borderColor: '#1DB954',
+    borderColor: '#1DB954',  
   },
   buttonText: {
     color: '#1DB954',
@@ -78,9 +97,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   logoutButton: {
-    backgroundColor: '#1DB954',
+    backgroundColor: '#1DB954',  
+    marginTop: 30,
   },
   logoutButtonText: {
-    color: '#191414',
+    color: '#191414',  
   },
 });
