@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -23,7 +24,8 @@ export default function LoginScreen() {
 
       if (response.status === 200) {
         const data = await response.json();
-        navigation.navigate('Perfil');
+        storeData(email)
+        navigation.navigate('home');
       } else if (response.status === 401) {
         alert('Email ou senha incorretos');
       } else {
@@ -33,6 +35,15 @@ export default function LoginScreen() {
     } catch (error) {
       console.error(error);
       alert('Erro: não foi possível fazer o login');
+    }
+  };
+
+  const storeData = async (value) => {
+    try {
+      console.log(value)
+      await AsyncStorage.setItem('email', value);
+    } catch (e) {
+      console.log(e)
     }
   };
 
